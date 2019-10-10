@@ -1,4 +1,17 @@
 // MARK: - Core
+public protocol OutputType {
+    associatedtype Value
+    @discardableResult func bind(to binder: Binder<Value>) -> Subscription
+    func bind(to binders: [Binder<Value>])
+    func bind(_ closure: @escaping (Value) -> Void) -> Subscription
+    func initial(_ value: Value) -> Output<Value>
+    func debug(identifier: String) -> Output<Value>
+    func unbind(for subscription: Subscription)
+    func asMutable() -> MutableOutput<Value>
+}
+
+extension Output: OutputType {}
+
 public class Output<Value>: Unbindable {
     public struct Printer: Printable {
         public init() {}
